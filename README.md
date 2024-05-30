@@ -1,2 +1,9 @@
 # Knights-Travails
 The 'Knights Travails' project from TOP.
+
+The goal of this assignment is to build a function knightMoves that shows the shortest possible way to get from one square to another by outputting all squares the knight will stop on along the way. You will need a graph, how it is represented is up to you. Be careful not to allow any moves to go off the board (8x8). The function will take two inputs: the first is the starting square, the second is the ending square.
+
+General Approach.
+An adjacency list seems best. Give all of the coordinates on the board a number (0 - 63 I suppose), have those numbers be the indices, and the valid moves for a knight from that vertex be the adjacent vertices. I need a way to map the coordinates to a series of unique and sequential integers. There are 64 index vertices and at most 8 adjacent vertices. Once the adjacency list is generated, I will need a way to check for the next step. Here's a seemingly inelegant and brutish way. The idea is the equivalent of going out in every possible direction until the vertex we're looking for is found. This will get very complex very quick, though. I should probably use DFS and BFS since the instructions talk about them. If I were to make a tree with the nodes, it would be a tree with up to eight child nodes. Maybe I should experiment with making trees with more than two children. The problem is what to do to avoid an infinite loop of the knight going back and forth between two squares. We could keep a list of vertices already visited, and when looking for next steps we could check if any next steps are in the array of vertices already visited. 
+
+An interesting future project would be to expand upon this. Have it check any size of board, change the possible moves of the knights, check if it's even feasible for the knight to move to certain squares, etc.
