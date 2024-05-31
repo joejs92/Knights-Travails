@@ -47,11 +47,34 @@ for(let i = 0; i < coordinateArray.length; i++){
 };
 /*
 Now to make the search for the shortest path between 
-vertices. It finds a path, but not the shortest.
+vertices. It finds the length of the shortest path, but
+doesn't show the path itself. Now, how do we show it?
+Maybe, starting at the end, we can go back and find 
+irst appearance of the finish index and for which index 
+it appeared, then repeat until you get back to the 
+starting index. With this line of thinking, I see two
+ways of doing it. First, to the queue push an array, with
+the first value being the adjacent value and the 
+second value being the current index. Will have to 
+change the logic of the function to refelct this. Then
+from the end, take the end index and push the 
+corresponding coordinates to the path array, find the
+matching current index in the exitedValues, repeat until
+back to the start. Second, use a hash map of sorts. It
+will do the same thing, but quicker. Create an array of
+length 63, each index of this array will correspond to
+an adjacents, from below, and the value will be the 
+current index. Process: Take ending index, convert to
+coordinates, upload to path, lookup last index in 
+adjacentsArray, take that value, convert to coordinates,
+upload to path, repeat until the first value is reached
+and pushed to path, reverse and return path. I'll go 
+with option 2.
 */
 function knightMoves(start,finish){
     let index = findIndex(start);
     const finishIndex = findIndex(finish);
+    let adjacentsArray = new Array(64);
     let path = [];
     let exitedValues = [];
     let queue = [];
@@ -59,16 +82,30 @@ function knightMoves(start,finish){
     let currentMoveLength = 1;
     let nextMoveLength = 0;
     queue.push(index);
+    adjacentsArray[index] = 0;
     while(queue.length != 0){
         index = queue[0];
-        //console.log(currentMove, queue);
         if(index == finishIndex){
-            return currentMove;
+            //let value = adjacentsArray[index];
+            while(index != 0){
+                let coordinates = coordinateArray[index];
+                path.push(coordinates);
+                index = adjacentsArray[index];
+            }
+            path.push(start);
+            path.reverse();
+            let pathString = '';
+            for(let i = 0; i < path.length; i++){
+                pathString +=JSON.stringify(path[i]);
+            }
+            const outputString = `You made it in ${currentMove} moves! Here is your path: ${pathString}`;
+            return outputString;
         }
         adjacents = adjacencyList[index];
         for(let i = 0; i < adjacents.length; i++){
             if(!exitedValues.includes(adjacents[i]) && !queue.includes(adjacents[i])){
                 nextMoveLength += 1;
+                adjacentsArray[adjacents[i]] = index;
                 queue.push(adjacents[i]);
             };    
         }
@@ -82,5 +119,7 @@ function knightMoves(start,finish){
         }
     }
 }
-
-console.log(knightMoves([0,0],[7,7]));
+//You have the envelope with the board if you want to more
+//thoroughly test it.
+console.log(knightMoves([0,0],[4,3]));
+//knightMoves([0,0],[1,1])
