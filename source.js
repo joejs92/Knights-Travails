@@ -61,16 +61,14 @@ function knightMoves(start,finish){
     queue.push(index);
     while(queue.length != 0){
         index = queue[0];
+        //console.log(currentMove, queue);
         if(index == finishIndex){
             return currentMove;
         }
         adjacents = adjacencyList[index];
-        nextMoveLength = adjacents.length-1;
         for(let i = 0; i < adjacents.length; i++){
-            console.log(adjacents[i]);
-            //The logical operation below is blowing up
-            //the whole thing. Works fine otherwise.
             if(!exitedValues.includes(adjacents[i]) && !queue.includes(adjacents[i])){
+                nextMoveLength += 1;
                 queue.push(adjacents[i]);
             };    
         }
@@ -85,4 +83,4 @@ function knightMoves(start,finish){
     }
 }
 
-console.log(knightMoves([0,0],[3,3]));
+console.log(knightMoves([0,0],[7,7]));
